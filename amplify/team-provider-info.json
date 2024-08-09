@@ -1,0 +1,41 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-weberbrainapp-dev-49e94-authRole",
+      "UnauthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-dev-49e94-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-dev-49e94-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-weberbrainapp-dev-49e94-deployment",
+      "UnauthRoleName": "amplify-weberbrainapp-dev-49e94-unauthRole",
+      "StackName": "amplify-weberbrainapp-dev-49e94",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:021891571472:stack/amplify-weberbrainapp-dev-49e94/268c4db0-567b-11ef-8e52-0a812807e2b3",
+      "AmplifyAppId": "d6g0hcu8aggqw"
+    }
+  },
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-weberbrainapp-staging-2f3a0-authRole",
+      "UnauthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-staging-2f3a0-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-staging-2f3a0-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-weberbrainapp-staging-2f3a0-deployment",
+      "UnauthRoleName": "amplify-weberbrainapp-staging-2f3a0-unauthRole",
+      "StackName": "amplify-weberbrainapp-staging-2f3a0",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:021891571472:stack/amplify-weberbrainapp-staging-2f3a0/5d4fc610-567b-11ef-9e7f-02baa77f8405",
+      "AmplifyAppId": "d6g0hcu8aggqw"
+    }
+  },
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-weberbrainapp-main-89f5e-authRole",
+      "UnauthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-main-89f5e-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::021891571472:role/amplify-weberbrainapp-main-89f5e-authRole",
+      "Region": "ap-southeast-1",
+      "DeploymentBucketName": "amplify-weberbrainapp-main-89f5e-deployment",
+      "UnauthRoleName": "amplify-weberbrainapp-main-89f5e-unauthRole",
+      "StackName": "amplify-weberbrainapp-main-89f5e",
+      "StackId": "arn:aws:cloudformation:ap-southeast-1:021891571472:stack/amplify-weberbrainapp-main-89f5e/891a8f00-567b-11ef-9187-02d0b279726b",
+      "AmplifyAppId": "d6g0hcu8aggqw"
+    }
+  }
+}

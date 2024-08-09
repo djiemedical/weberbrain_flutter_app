@@ -1,0 +1,49 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ dev, staging, main ]
+  pull_request:
+    branches: [ dev, staging, main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.0'
+        channel: 'stable'
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm install -g @aws-amplify/cli
+    - run: flutter pub get
+    - run: flutter test
+    - run: flutter build web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-southeast-1
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - run: npm install -g @aws-amplify/cli
+    - name: Deploy to Amplify
+      run: |
+        BRANCH_NAME=${GITHUB_REF##*/}
+        amplify env checkout $BRANCH_NAME
+        amplify push --yes
+        AMPLIFY_APP_ID=$(aws amplify list-apps --query "apps[?name=='weberbrain_flutter_app'].appId" --output text)
+        aws amplify start-job --app-id $AMPLIFY_APP_ID --branch-name $BRANCH_NAME --job-type RELEASE
