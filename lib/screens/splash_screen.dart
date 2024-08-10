@@ -86,7 +86,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: LinearProgressIndicator(
                     value: _animation.value,
                     backgroundColor: Colors.grey[300],
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
                   ),
                 ),
                 Text('Build: $_buildNumber'),

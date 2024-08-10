@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
 import 'package:intl/intl.dart';
+import 'package:country_picker/country_picker.dart';
+import '../services/auth_service.dart';
+import '../services/location_service.dart';
+import 'account_confirmation_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,7 +23,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
 
   final AuthService _authService = AuthService();
+  final LocationService _locationService = LocationService();
   bool _isLoading = false;
+  Country? _selectedCountry;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeCountry();
+  }
+
+  Future<void> _initializeCountry() async {
+    final countryCode = await _locationService.getCountryCode();
+    if (countryCode != null) {
+      setState(() {
+        _selectedCountry = Country.parse(countryCode);
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -55,32 +75,38 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
 
       try {
-        final success = await _authService.signUp(
+        final result = await _authService.signUp(
           _emailController.text,
           _passwordController.text,
           {
             'given_name': _firstNameController.text,
             'family_name': _lastNameController.text,
+            'name': '${_firstNameController.text} ${_lastNameController.text}',
             'birthdate': _dobController.text,
-            'phone_number': _phoneController.text,
+            'phone_number':
+                '+${_selectedCountry!.phoneCode}${_phoneController.text}',
+            'email': _emailController.text,
+            'custom:country': _selectedCountry!.countryCode,
           },
         );
 
-        if (success) {
-          // Navigate to verification screen
-          Navigator.pushNamed(
+        if (result.success) {
+          // Navigate to AccountConfirmationScreen instead of VerificationScreen
+          Navigator.push(
             context,
-            '/verification',
-            arguments: _emailController.text,
+            MaterialPageRoute(
+              builder: (context) =>
+                  AccountConfirmationScreen(email: _emailController.text),
+            ),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Sign up failed. Please try again.')),
+            SnackBar(content: Text(result.message)),
           );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again later.')),
+          SnackBar(content: Text('An error occurred: ${e.toString()}')),
         );
       } finally {
         setState(() {
@@ -112,6 +138,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _lastNameController,
                   decoration: const InputDecoration(labelText: 'Last Name'),
@@ -122,6 +149,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _dobController,
                   decoration: const InputDecoration(labelText: 'Date of Birth'),
@@ -134,9 +162,42 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
+                InkWell(
+                  onTap: () {
+                    showCountryPicker(
+                      context: context,
+                      showPhoneCode: true,
+                      onSelect: (Country country) {
+                        setState(() {
+                          _selectedCountry = country;
+                        });
+                      },
+                    );
+                  },
+                  child: InputDecorator(
+                    decoration: InputDecoration(
+                      labelText: 'Country',
+                      border: OutlineInputBorder(),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(_selectedCountry?.name ?? 'Select Country'),
+                        Icon(Icons.arrow_drop_down),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _phoneController,
-                  decoration: const InputDecoration(labelText: 'Phone Number'),
+                  decoration: InputDecoration(
+                    labelText: 'Phone Number',
+                    prefixText: _selectedCountry != null
+                        ? '+${_selectedCountry!.phoneCode} '
+                        : null,
+                  ),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -145,6 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(labelText: 'Email'),
@@ -153,10 +215,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    // Add more sophisticated email validation if needed
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Please enter a valid email address';
+                    }
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
                   decoration: const InputDecoration(labelText: 'Password'),
@@ -171,6 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
+                SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
                   decoration:
@@ -183,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _isLoading ? null : _submitForm,
                   child: _isLoading

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../services/auth_service.dart';
 import '../utils/secure_storage.dart';
+import 'password_reset_verification_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,19 +32,19 @@ class _LoginScreenState extends State<LoginScreen> {
       });
 
       try {
-        final session = await _authService.signIn(
+        final result = await _authService.signIn(
           _emailController.text,
           _passwordController.text,
         );
 
-        if (session != null) {
+        if (result.success && result.session != null) {
           // Store user session securely
           await _secureStorage.writeSecureData(
-              'idToken', session.idToken.jwtToken ?? '');
+              'idToken', result.session!.idToken.jwtToken ?? '');
           await _secureStorage.writeSecureData(
-              'accessToken', session.accessToken.jwtToken ?? '');
+              'accessToken', result.session!.accessToken.jwtToken ?? '');
           await _secureStorage.writeSecureData(
-              'refreshToken', session.refreshToken?.token ?? '');
+              'refreshToken', result.session!.refreshToken?.token ?? '');
           await _secureStorage.writeSecureData('is_logged_in', 'true');
 
           // Navigate to home screen or dashboard
@@ -53,9 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(
-                    'Login failed. Please check your credentials and try again.')),
+            SnackBar(content: Text(result.message)),
           );
         }
       } catch (e) {
@@ -94,20 +93,22 @@ class _LoginScreenState extends State<LoginScreen> {
             ElevatedButton(
               child: Text('Send Code'),
               onPressed: () async {
-                final success = await _authService
+                final result = await _authService
                     .forgotPassword(forgotPasswordEmailController.text);
-                if (success) {
-                  Navigator.of(context).pop();
-                  Navigator.pushNamed(
+                if (result.success) {
+                  Navigator.of(context).pop(); // Close the dialog
+                  // Navigate to PasswordResetVerificationScreen
+                  Navigator.push(
                     context,
-                    '/verification',
-                    arguments: forgotPasswordEmailController.text,
+                    MaterialPageRoute(
+                      builder: (context) => PasswordResetVerificationScreen(
+                        email: forgotPasswordEmailController.text,
+                      ),
+                    ),
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                        content: Text(
-                            'Failed to send reset code. Please try again.')),
+                    SnackBar(content: Text(result.message)),
                   );
                 }
               },
@@ -121,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: const Text('Login'), centerTitle: true),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -134,11 +135,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 Center(
                   child: Image.asset(
                     'assets/logo.png',
-                    width: 150,
-                    height: 150,
+                    width: 250,
+                    height: 250,
                   ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 10),
                 TextFormField(
                   controller: _emailController,
                   decoration: const InputDecoration(

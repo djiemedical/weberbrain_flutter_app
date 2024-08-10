@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:async';
 import '../services/auth_service.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -17,16 +19,55 @@ class VerificationScreen extends StatefulWidget {
 
 class _VerificationScreenState extends State<VerificationScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _codeController = TextEditingController();
-  final _newPasswordController = TextEditingController();
+  final List<TextEditingController> _codeControllers =
+      List.generate(6, (index) => TextEditingController());
   final AuthService _authService = AuthService();
   bool _isLoading = false;
+  bool _canResend = true;
+  int _remainingTime = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startResendTimer();
+  }
 
   @override
   void dispose() {
-    _codeController.dispose();
-    _newPasswordController.dispose();
+    for (var controller in _codeControllers) {
+      controller.dispose();
+    }
+    _timer?.cancel();
     super.dispose();
+  }
+
+  void _startResendTimer() {
+    setState(() {
+      _canResend = false;
+      _remainingTime = 180; // 3 minutes in seconds
+    });
+
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _canResend = true;
+          timer.cancel();
+        }
+      });
+    });
+  }
+
+  String get _timerText {
+    int minutes = _remainingTime ~/ 60;
+    int seconds = _remainingTime % 60;
+    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  String get _verificationCode {
+    return _codeControllers.map((controller) => controller.text).join();
   }
 
   Future<void> _submitForm() async {
@@ -36,36 +77,37 @@ class _VerificationScreenState extends State<VerificationScreen> {
       });
 
       try {
-        bool success;
         if (widget.isPasswordReset) {
-          success = await _authService.confirmNewPassword(
-            widget.email,
-            _codeController.text,
-            _newPasswordController.text,
+          // For password reset, navigate to reset password screen
+          Navigator.pushReplacementNamed(
+            context,
+            '/reset-password',
+            arguments: {
+              'email': widget.email,
+              'verificationCode': _verificationCode,
+            },
           );
         } else {
-          success = await _authService.confirmSignUp(
+          // For account confirmation
+          final result = await _authService.confirmSignUp(
             widget.email,
-            _codeController.text,
+            _verificationCode,
           );
-        }
 
-        if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                content: Text(widget.isPasswordReset
-                    ? 'Password reset successful'
-                    : 'Email verified successfully')),
-          );
-          Navigator.pushReplacementNamed(context, '/login');
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Verification failed. Please try again.')),
-          );
+          if (result.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(result.message)),
+            );
+            Navigator.pushReplacementNamed(context, '/login');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(result.message)),
+            );
+          }
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again later.')),
+          SnackBar(content: Text('An error occurred: ${e.toString()}')),
         );
       } finally {
         setState(() {
@@ -75,67 +117,139 @@ class _VerificationScreenState extends State<VerificationScreen> {
     }
   }
 
+  Future<void> _resendCode() async {
+    if (!_canResend) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      AuthResult result;
+      if (widget.isPasswordReset) {
+        result = await _authService.forgotPassword(widget.email);
+      } else {
+        result = await _authService.resendConfirmationCode(widget.email);
+      }
+
+      if (result.success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result.message)),
+        );
+        _startResendTimer();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result.message)),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: ${e.toString()}')),
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title:
-              Text(widget.isPasswordReset ? 'Reset Password' : 'Verify Email')),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Enter the verification code sent to ${widget.email}',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  controller: _codeController,
-                  decoration:
-                      const InputDecoration(labelText: 'Verification Code'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the verification code';
-                    }
-                    return null;
-                  },
-                ),
-                if (widget.isPasswordReset) ...[
+        title:
+            Text(widget.isPasswordReset ? 'Verify Reset Code' : 'Verify Email'),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Enter the verification code sent to ${widget.email}',
+                    style: TextStyle(fontSize: 16),
+                    textAlign: TextAlign.center,
+                  ),
                   const SizedBox(height: 20),
-                  TextFormField(
-                    controller: _newPasswordController,
-                    decoration:
-                        const InputDecoration(labelText: 'New Password'),
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter a new password';
-                      }
-                      if (value.length < 8) {
-                        return 'Password must be at least 8 characters long';
-                      }
-                      return null;
-                    },
+                  VerificationCodeInput(
+                    controllers: _codeControllers,
+                  ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: _isLoading ? null : _submitForm,
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            widget.isPasswordReset ? 'Verify Code' : 'Verify'),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        onPressed:
+                            _canResend && !_isLoading ? _resendCode : null,
+                        child: Text('Resend Code'),
+                      ),
+                      Text(_canResend ? '' : 'Resend in $_timerText'),
+                    ],
                   ),
                 ],
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _submitForm,
-                  child: _isLoading
-                      ? CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                          widget.isPasswordReset ? 'Reset Password' : 'Verify'),
-                ),
-              ],
+              ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class VerificationCodeInput extends StatelessWidget {
+  final List<TextEditingController> controllers;
+
+  const VerificationCodeInput({Key? key, required this.controllers})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: List.generate(6, (index) => _buildDigitInput(context, index)),
+    );
+  }
+
+  Widget _buildDigitInput(BuildContext context, int index) {
+    return SizedBox(
+      width: 40,
+      child: TextFormField(
+        controller: controllers[index],
+        keyboardType: TextInputType.number,
+        textAlign: TextAlign.center,
+        inputFormatters: [
+          FilteringTextInputFormatter.digitsOnly,
+          LengthLimitingTextInputFormatter(1),
+        ],
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.zero,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onChanged: (value) {
+          if (value.isNotEmpty && index < 5) {
+            FocusScope.of(context).nextFocus();
+          }
+        },
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return '';
+          }
+          return null;
+        },
       ),
     );
   }

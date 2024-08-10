@@ -4,7 +4,7 @@ import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/sign_up_screen.dart';
-import 'screens/verification_code_screen.dart'; // Make sure this import matches your file name
+import 'screens/verification_code_screen.dart';
 import 'screens/reset_password_screen.dart';
 import 'utils/secure_storage.dart';
 
@@ -67,11 +67,14 @@ class MyApp extends StatelessWidget {
                 email: ModalRoute.of(context)!.settings.arguments as String,
               ),
             ),
-        '/reset-password': (context) => BackButtonHandler(
-              child: ResetPasswordScreen(
-                email: ModalRoute.of(context)!.settings.arguments as String,
-              ),
-            ),
+        '/reset-password': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments
+              as Map<String, dynamic>;
+          return ResetPasswordScreen(
+            email: args['email'] as String,
+            verificationCode: args['verificationCode'] as String,
+          );
+        },
       },
     );
   }

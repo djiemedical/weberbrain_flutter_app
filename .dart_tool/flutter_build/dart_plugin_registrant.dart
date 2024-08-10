@@ -6,10 +6,15 @@
 // @dart = 3.0
 
 import 'dart:io'; // flutter_ignore: dart_io_import.
+import 'package:geocoding_android/geocoding_android.dart';
+import 'package:geolocator_android/geolocator_android.dart';
 import 'package:path_provider_android/path_provider_android.dart';
+import 'package:geocoding_ios/geocoding_ios.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider_linux/path_provider_linux.dart';
+import 'package:geolocator_apple/geolocator_apple.dart';
 import 'package:path_provider_foundation/path_provider_foundation.dart';
 import 'package:flutter_secure_storage_windows/flutter_secure_storage_windows.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -22,6 +27,24 @@ class _PluginRegistrant {
   static void register() {
     if (Platform.isAndroid) {
       try {
+        GeocodingAndroid.registerWith();
+      } catch (err) {
+        print(
+          '`geocoding_android` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        GeolocatorAndroid.registerWith();
+      } catch (err) {
+        print(
+          '`geolocator_android` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
         PathProviderAndroid.registerWith();
       } catch (err) {
         print(
@@ -31,6 +54,24 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isIOS) {
+      try {
+        GeocodingIOS.registerWith();
+      } catch (err) {
+        print(
+          '`geocoding_ios` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
+      try {
+        GeolocatorApple.registerWith();
+      } catch (err) {
+        print(
+          '`geolocator_apple` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
       try {
         PathProviderFoundation.registerWith();
       } catch (err) {
@@ -60,6 +101,15 @@ class _PluginRegistrant {
       }
 
     } else if (Platform.isMacOS) {
+      try {
+        GeolocatorApple.registerWith();
+      } catch (err) {
+        print(
+          '`geolocator_apple` threw an error: $err. '
+          'The app may not function as expected until you remove this plugin from pubspec.yaml'
+        );
+      }
+
       try {
         PathProviderFoundation.registerWith();
       } catch (err) {
