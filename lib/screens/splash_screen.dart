@@ -8,14 +8,36 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   String _buildNumber = '';
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     _getBuildNumber();
+    _setupAnimation();
     _navigateToNextScreen();
+  }
+
+  void _setupAnimation() {
+    _controller = AnimationController(
+      duration: const Duration(seconds: 5),
+      vsync: this,
+    );
+    _animation = Tween<double>(begin: 0, end: 1).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   Future<void> _getBuildNumber() async {
@@ -42,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('assets/logo.png', width: 200, height: 200),
+                Image.asset('assets/logo.png', width: 270, height: 270),
                 const SizedBox(height: 20),
                 const Text(
                   'Weber Brain App',
@@ -51,15 +73,25 @@ class _SplashScreenState extends State<SplashScreen> {
               ],
             ),
           ),
-          // Bottom information
+          // Bottom progress bar and copyright info
           Positioned(
             left: 0,
             right: 0,
-            bottom: 20,
+            bottom: 0,
             child: Column(
               children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+                  child: LinearProgressIndicator(
+                    value: _animation.value,
+                    backgroundColor: Colors.grey[300],
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                  ),
+                ),
                 Text('Build: $_buildNumber'),
                 const Text('© 2024 Weber Medical GmbH'),
+                const SizedBox(height: 20),
               ],
             ),
           ),

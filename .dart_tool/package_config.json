@@ -44,6 +44,12 @@
       "languageVersion": "2.18"
     },
     {
+      "name": "country_picker",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/country_picker-2.0.26",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "crypto",
       "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/crypto-3.0.3",
       "packageUri": "lib/",
@@ -98,6 +104,42 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "flutter_secure_storage",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage-9.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_secure_storage_linux",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_linux-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_secure_storage_macos",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_macos-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_secure_storage_platform_interface",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_platform_interface-1.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_secure_storage_web",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_web-1.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_secure_storage_windows",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_secure_storage_windows-3.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_test",
       "rootUri": "file:///C:/flutter/packages/flutter_test",
       "packageUri": "lib/",
@@ -122,10 +164,16 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "js",
-      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.7.1",
+      "name": "intl",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/intl-0.19.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "js",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/js-0.6.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
     },
     {
       "name": "json_annotation",
@@ -206,6 +254,48 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "path_provider",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider-2.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "path_provider_android",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_android-2.2.9",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "path_provider_foundation",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_foundation-2.4.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "path_provider_linux",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_linux-2.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.19"
+    },
+    {
+      "name": "path_provider_platform_interface",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_platform_interface-2.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
+      "name": "path_provider_windows",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/path_provider_windows-2.3.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "platform",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/platform-3.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "plugin_platform_interface",
       "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/plugin_platform_interface-2.1.8",
       "packageUri": "lib/",
@@ -266,6 +356,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "universal_io",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/universal_io-2.2.2",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "uuid",
       "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/uuid-4.4.2",
       "packageUri": "lib/",
@@ -296,13 +392,19 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "xdg_directories",
+      "rootUri": "file:///C:/Users/wc/AppData/Local/Pub/Cache/hosted/pub.dev/xdg_directories-1.0.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "weberbrain_flutter_app",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2024-08-10T04:27:05.498100Z",
+  "generated": "2024-08-10T10:13:16.022156Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///C:/flutter",

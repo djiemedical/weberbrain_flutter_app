@@ -33,7 +33,7 @@ class OnboardingScreen extends StatelessWidget {
               ElevatedButton(
                 child: const Text('Accept and Continue'),
                 onPressed: () {
-                  print('Terms accepted, moving to next screen');
+                  Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
             ],

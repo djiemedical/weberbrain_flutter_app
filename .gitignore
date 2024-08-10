@@ -21,3 +21,4 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 amplify/team-provider-info.json
+/aws
