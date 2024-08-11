@@ -10,8 +10,8 @@ class AuthResult {
 
 class AuthService {
   final userPool = CognitoUserPool(
-    'ap-southeast-1_gr84OWPCx', // Your User Pool ID
-    '56qctkq30uenjdsgc9n1fv1ru4', // Your Client ID
+    'ap-southeast-1_gr84OWPCx',
+    '56qctkq30uenjdsgc9n1fv1ru4',
   );
 
   Future<AuthResult> signUp(
@@ -157,102 +157,118 @@ class AuthService {
     }
   }
 
-  Future<AuthResult> signOut(String email) async {
-    final cognitoUser = CognitoUser(email, userPool);
-    try {
-      await cognitoUser.signOut();
-      return AuthResult(
-        success: true,
-        message: 'User successfully signed out',
-      );
-    } catch (e) {
-      return AuthResult(
-        success: false,
-        message: 'An error occurred during sign out: ${e.toString()}',
-      );
-    }
-  }
+  // Option 1: signOut method without BuildContext
 
-  Future<AuthResult> getCurrentUser() async {
+  Future<void> signOut() async {
     try {
       final cognitoUser = await userPool.getCurrentUser();
-      if (cognitoUser == null) {
+      if (cognitoUser != null) {
+        await cognitoUser.signOut();
+      }
+      // You might want to clear any stored user data here
+    } catch (e) {
+      throw Exception('Error signing out: ${e.toString()}');
+    }
+
+    // Option 2: Use BuildContext in AuthService
+    /*
+  Future<void> signOutWithContext(BuildContext context) async {
+    try {
+      final cognitoUser = await userPool.getCurrentUser();
+      if (cognitoUser != null) {
+        await cognitoUser.signOut();
+      }
+      // You might want to clear any stored user data here
+
+      // Navigate to login screen or perform any UI-related actions
+      Navigator.of(context).pushReplacementNamed('/login');
+    } catch (e) {
+      throw Exception('Error signing out: ${e.toString()}');
+    }
+  }
+  */
+
+    Future<AuthResult> getCurrentUser() async {
+      try {
+        final cognitoUser = await userPool.getCurrentUser();
+        if (cognitoUser == null) {
+          return AuthResult(
+            success: false,
+            message: 'No current user found',
+          );
+        }
+        final session = await cognitoUser.getSession();
+        return AuthResult(
+          success: true,
+          message: 'Current user session retrieved',
+          session: session,
+        );
+      } catch (e) {
         return AuthResult(
           success: false,
-          message: 'No current user found',
+          message: 'Failed to get current user: ${e.toString()}',
         );
       }
-      final session = await cognitoUser.getSession();
-      return AuthResult(
-        success: true,
-        message: 'Current user session retrieved',
-        session: session,
-      );
-    } catch (e) {
-      return AuthResult(
-        success: false,
-        message: 'Failed to get current user: ${e.toString()}',
-      );
     }
-  }
 
-  Future<AuthResult> changePassword(
-      String email, String oldPassword, String newPassword) async {
-    final cognitoUser = CognitoUser(email, userPool);
-    try {
-      final authDetails = AuthenticationDetails(
-        username: email,
-        password: oldPassword,
-      );
-      final session = await cognitoUser.authenticateUser(authDetails);
-      await cognitoUser.changePassword(oldPassword, newPassword);
-      return AuthResult(
-        success: true,
-        message: 'Password changed successfully',
-        session: session,
-      );
-    } catch (e) {
-      return AuthResult(
-        success: false,
-        message: 'Failed to change password: ${e.toString()}',
-      );
+    Future<AuthResult> changePassword(
+        String email, String oldPassword, String newPassword) async {
+      final cognitoUser = CognitoUser(email, userPool);
+      try {
+        final authDetails = AuthenticationDetails(
+          username: email,
+          password: oldPassword,
+        );
+        final session = await cognitoUser.authenticateUser(authDetails);
+        await cognitoUser.changePassword(oldPassword, newPassword);
+        return AuthResult(
+          success: true,
+          message: 'Password changed successfully',
+          session: session,
+        );
+      } catch (e) {
+        return AuthResult(
+          success: false,
+          message: 'Failed to change password: ${e.toString()}',
+        );
+      }
     }
-  }
 
-  Future<AuthResult> getUserAttributes(String email) async {
-    final cognitoUser = CognitoUser(email, userPool);
-    try {
-      final attributes = await cognitoUser.getUserAttributes();
-      return AuthResult(
-        success: true,
-        message: 'User attributes retrieved successfully',
-        session:
-            null, // You might want to create a custom result class for this method
-      );
-    } catch (e) {
-      return AuthResult(
-        success: false,
-        message: 'Failed to get user attributes: ${e.toString()}',
-      );
+    Future<AuthResult> getUserAttributes(String email) async {
+      final cognitoUser = CognitoUser(email, userPool);
+      try {
+        final attributes = await cognitoUser.getUserAttributes();
+        return AuthResult(
+          success: true,
+          message: 'User attributes retrieved successfully',
+          session:
+              null, // You might want to create a custom result class for this method
+        );
+      } catch (e) {
+        return AuthResult(
+          success: false,
+          message: 'Failed to get user attributes: ${e.toString()}',
+        );
+      }
     }
-  }
 
-  Future<AuthResult> verifyPasswordResetCode(
-      String email, String verificationCode) async {
-    final cognitoUser = CognitoUser(email, userPool);
-    try {
-      // This is a placeholder. Cognito doesn't have a separate verification step.
-      // We're just checking if the user exists and is allowed to reset the password.
-      await cognitoUser.forgotPassword();
-      return AuthResult(
-        success: true,
-        message: 'Verification code is valid',
-      );
-    } catch (e) {
-      return AuthResult(
-        success: false,
-        message: 'Error verifying code: ${e.toString()}',
-      );
+    Future<AuthResult> verifyPasswordResetCode(
+        String email, String verificationCode) async {
+      final cognitoUser = CognitoUser(email, userPool);
+      try {
+        // This is a placeholder. Cognito doesn't have a separate verification step.
+        // We're just checking if the user exists and is allowed to reset the password.
+        await cognitoUser.forgotPassword();
+        return AuthResult(
+          success: true,
+          message: 'Verification code is valid',
+        );
+      } catch (e) {
+        return AuthResult(
+          success: false,
+          message: 'Error verifying code: ${e.toString()}',
+        );
+      }
     }
   }
 }

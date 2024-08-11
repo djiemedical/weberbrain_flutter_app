@@ -6,6 +6,7 @@ import 'screens/login_screen.dart';
 import 'screens/sign_up_screen.dart';
 import 'screens/verification_code_screen.dart';
 import 'screens/reset_password_screen.dart';
+import 'screens/my_device_screen.dart';
 import 'utils/secure_storage.dart';
 
 void main() {
@@ -63,18 +64,20 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const BackButtonHandler(child: SignUpScreen()),
         '/verification': (context) => BackButtonHandler(
               child: VerificationScreen(
-                // Make sure this matches your class name
                 email: ModalRoute.of(context)!.settings.arguments as String,
               ),
             ),
         '/reset-password': (context) {
           final args = ModalRoute.of(context)!.settings.arguments
-              as Map<String, dynamic>;
-          return ResetPasswordScreen(
-            email: args['email'] as String,
-            verificationCode: args['verificationCode'] as String,
+              as Map<String, dynamic>?;
+          return BackButtonHandler(
+            child: ResetPasswordScreen(
+              email: args?['email'] as String?,
+            ),
           );
         },
+        '/my-devices': (context) =>
+            const BackButtonHandler(child: MyDeviceScreen()),
       },
     );
   }

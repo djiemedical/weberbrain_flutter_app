@@ -77,33 +77,21 @@ class _VerificationScreenState extends State<VerificationScreen> {
       });
 
       try {
-        if (widget.isPasswordReset) {
-          // For password reset, navigate to reset password screen
-          Navigator.pushReplacementNamed(
-            context,
-            '/reset-password',
-            arguments: {
-              'email': widget.email,
-              'verificationCode': _verificationCode,
-            },
-          );
-        } else {
-          // For account confirmation
-          final result = await _authService.confirmSignUp(
-            widget.email,
-            _verificationCode,
-          );
+        final result = await _authService.confirmSignUp(
+          widget.email,
+          _verificationCode,
+        );
 
-          if (result.success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(result.message)),
-            );
-            Navigator.pushReplacementNamed(context, '/login');
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(result.message)),
-            );
-          }
+        if (result.success) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Account verified successfully')),
+          );
+          // Navigate directly to MyDeviceScreen
+          Navigator.pushReplacementNamed(context, '/my-devices');
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(result.message)),
+          );
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
