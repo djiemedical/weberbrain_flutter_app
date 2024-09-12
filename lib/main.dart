@@ -10,6 +10,7 @@ import 'screens/my_device_screen.dart';
 import 'utils/secure_storage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weber Brain App',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -41,22 +43,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: FutureBuilder<bool>(
-        future: SecureStorage()
-            .readSecureData('is_logged_in')
-            .then((value) => value == 'true'),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == true) {
-              return const BackButtonHandler(child: LoginScreen());
-            } else {
-              return const BackButtonHandler(child: SplashScreen());
-            }
-          }
-          return const Scaffold(
-              body: Center(child: CircularProgressIndicator()));
-        },
-      ),
+      home: const SplashScreen(), // Always start with the SplashScreen
       routes: {
         '/onboarding': (context) =>
             const BackButtonHandler(child: OnboardingScreen()),
