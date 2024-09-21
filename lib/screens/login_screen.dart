@@ -21,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _obscurePassword = true;
 
   // Define the accent color
-  final Color accentColor = Color(0xFF2691A5);
+  final Color accentColor = const Color(0xFF2691A5);
 
   @override
   void dispose() {
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again later.')),
+          const SnackBar(content: Text('An error occurred. Please try again later.')),
         );
       } finally {
         setState(() {
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1F2225),
+      backgroundColor: const Color(0xFF1F2225),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -108,9 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _emailController,
                     decoration: InputDecoration(
                       labelText: 'Username@email.com',
-                      labelStyle: TextStyle(color: Colors.white70),
+                      labelStyle: const TextStyle(color: Colors.white70),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white30),
+                        borderSide: const BorderSide(color: Colors.white30),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -118,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -132,9 +132,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: _passwordController,
                     decoration: InputDecoration(
                       labelText: 'Password',
-                      labelStyle: TextStyle(color: Colors.white70),
+                      labelStyle: const TextStyle(color: Colors.white70),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white30),
+                        borderSide: const BorderSide(color: Colors.white30),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       focusedBorder: OutlineInputBorder(
@@ -155,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                     obscureText: _obscurePassword,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -177,16 +177,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _rememberMe = value!;
                               });
                             },
-                            fillColor: MaterialStateProperty.resolveWith<Color>(
-                              (Set<MaterialState> states) {
-                                if (states.contains(MaterialState.selected)) {
+                            fillColor: WidgetStateProperty.resolveWith<Color>(
+                              (Set<WidgetState> states) {
+                                if (states.contains(WidgetState.selected)) {
                                   return accentColor;
                                 }
                                 return Colors.white70;
                               },
                             ),
                           ),
-                          Text(
+                          const Text(
                             'Remember me',
                             style: TextStyle(color: Colors.white70),
                           ),
@@ -197,7 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ResetPasswordScreen(),
+                              builder: (context) => const ResetPasswordScreen(),
                             ),
                           );
                         },
@@ -211,17 +211,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 24),
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitForm,
-                    child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text('Login'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: accentColor,
                       foregroundColor: Colors.white,
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    child: _isLoading
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text('Login'),
                   ),
                   const SizedBox(height: 16),
                   TextButton(

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import '../utils/secure_storage.dart';
 
 class OnboardingScreen extends StatelessWidget {
-  const OnboardingScreen({Key? key}) : super(key: key);
+  const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final Color backgroundColor = Color(0xFF1F2225);
-    final Color accentColor = Color(0xFF2691A5);
+    final Color backgroundColor = const Color(0xFF1F2225);
+    final Color accentColor = const Color(0xFF2691A5);
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -19,8 +19,8 @@ class OnboardingScreen extends StatelessWidget {
               'assets/weberbrain_logo.png',
               width: 200,
             ),
-            SizedBox(height: 40),
-            Text(
+            const SizedBox(height: 40),
+            const Text(
               'Welcome to WeberBrain',
               style: TextStyle(
                 color: Colors.white,
@@ -28,9 +28,9 @@ class OnboardingScreen extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+            const SizedBox(height: 20),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 40),
               child: Text(
                 'Enhance your cognitive performance with our advanced brain training app.',
                 textAlign: TextAlign.center,
@@ -40,16 +40,8 @@ class OnboardingScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             ElevatedButton(
-              child: Text(
-                'Get Started',
-                style: TextStyle(
-                  color: backgroundColor,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               onPressed: () async {
                 // Set the flag that onboarding has been seen
                 await SecureStorage()
@@ -58,9 +50,17 @@ class OnboardingScreen extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: accentColor,
-                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(
+                'Get Started',
+                style: TextStyle(
+                  color: backgroundColor,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

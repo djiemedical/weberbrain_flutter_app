@@ -7,7 +7,7 @@ import '../utils/secure_storage.dart';
 import 'account_confirmation_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -148,7 +148,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _lastNameController,
                         decoration:
@@ -160,7 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _dobController,
                         decoration:
@@ -174,7 +174,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       InkWell(
                         onTap: () {
                           showCountryPicker(
@@ -188,7 +188,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           );
                         },
                         child: InputDecorator(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             labelText: 'Country',
                             border: OutlineInputBorder(),
                           ),
@@ -196,12 +196,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(_selectedCountry?.name ?? 'Select Country'),
-                              Icon(Icons.arrow_drop_down),
+                              const Icon(Icons.arrow_drop_down),
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _phoneController,
                         decoration: InputDecoration(
@@ -218,7 +218,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _emailController,
                         decoration: const InputDecoration(labelText: 'Email'),
@@ -234,7 +234,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _passwordController,
                         decoration:
@@ -250,7 +250,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       TextFormField(
                         controller: _confirmPasswordController,
                         decoration: const InputDecoration(
@@ -263,11 +263,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       ElevatedButton(
                         onPressed: _isLoading ? null : _submitForm,
                         child: _isLoading
-                            ? CircularProgressIndicator(color: Colors.white)
+                            ? const CircularProgressIndicator(color: Colors.white)
                             : const Text('Sign Up'),
                       ),
                     ],

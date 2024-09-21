@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class CopyrightNotice extends StatelessWidget {
-  const CopyrightNotice({Key? key}) : super(key: key);
+  const CopyrightNotice({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,7 @@ import '../services/auth_service.dart';
 class PasswordResetVerificationScreen extends StatefulWidget {
   final String email;
 
-  const PasswordResetVerificationScreen({Key? key, required this.email})
-      : super(key: key);
+  const PasswordResetVerificationScreen({super.key, required this.email});
 
   @override
   _PasswordResetVerificationScreenState createState() =>
@@ -48,7 +47,7 @@ class _PasswordResetVerificationScreenState
       _remainingTime = 180;
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > 0) {
           _remainingTime--;
@@ -140,7 +139,7 @@ class _PasswordResetVerificationScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password'),
+        title: const Text('Reset Password'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -153,7 +152,7 @@ class _PasswordResetVerificationScreenState
                 children: [
                   Text(
                     'Enter the verification code sent to ${widget.email} and your new password',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
@@ -163,7 +162,7 @@ class _PasswordResetVerificationScreenState
                   const SizedBox(height: 20),
                   TextFormField(
                     controller: _newPasswordController,
-                    decoration: InputDecoration(labelText: 'New Password'),
+                    decoration: const InputDecoration(labelText: 'New Password'),
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -179,8 +178,8 @@ class _PasswordResetVerificationScreenState
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitForm,
                     child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text('Reset Password'),
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Reset Password'),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -189,7 +188,7 @@ class _PasswordResetVerificationScreenState
                       TextButton(
                         onPressed:
                             _canResend && !_isLoading ? _resendCode : null,
-                        child: Text('Resend Code'),
+                        child: const Text('Resend Code'),
                       ),
                       Text(_canResend ? '' : 'Resend in $_timerText'),
                     ],
@@ -207,8 +206,7 @@ class _PasswordResetVerificationScreenState
 class VerificationCodeInput extends StatelessWidget {
   final List<TextEditingController> controllers;
 
-  const VerificationCodeInput({Key? key, required this.controllers})
-      : super(key: key);
+  const VerificationCodeInput({super.key, required this.controllers});
 
   @override
   Widget build(BuildContext context) {

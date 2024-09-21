@@ -6,7 +6,7 @@ import 'verification_code_screen.dart';
 class ResetPasswordScreen extends StatefulWidget {
   final String? email;
 
-  const ResetPasswordScreen({Key? key, this.email}) : super(key: key);
+  const ResetPasswordScreen({super.key, this.email});
 
   @override
   _ResetPasswordScreenState createState() => _ResetPasswordScreenState();
@@ -64,7 +64,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   void _startResendTimer() {
     _resendCodeTimer = 180; // 3 minutes
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_resendCodeTimer > 0) {
           _resendCodeTimer--;
@@ -95,7 +95,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           });
           _startResendTimer();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Reset code sent to your email')),
+            const SnackBar(content: Text('Reset code sent to your email')),
           );
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +104,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again.')),
+          const SnackBar(content: Text('An error occurred. Please try again.')),
         );
       } finally {
         setState(() {
@@ -129,7 +129,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
         if (result.success) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Password reset successfully')),
+            const SnackBar(content: Text('Password reset successfully')),
           );
           // Navigate to MyDeviceScreen using named route
           Navigator.pushReplacementNamed(context, '/my-devices');
@@ -140,7 +140,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
         }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('An error occurred. Please try again.')),
+          const SnackBar(content: Text('An error occurred. Please try again.')),
         );
       } finally {
         setState(() {
@@ -154,7 +154,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Reset Password'),
+        title: const Text('Reset Password'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -168,14 +168,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   _isEmailSent
                       ? 'Enter the verification code sent to your email'
                       : 'Enter your email to receive a password reset code',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 20),
                 if (!_isEmailSent) ...[
                   TextFormField(
                     controller: _emailController,
-                    decoration: InputDecoration(labelText: 'Email'),
+                    decoration: const InputDecoration(labelText: 'Email'),
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -192,8 +192,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _sendResetCode,
                     child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text('Send Reset Code'),
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Send Reset Code'),
                   ),
                 ] else ...[
                   VerificationCodeInput(
@@ -205,7 +205,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     children: [
                       TextButton(
                         onPressed: _resendCodeTimer > 0 ? null : _sendResetCode,
-                        child: Text('Resend Code'),
+                        child: const Text('Resend Code'),
                       ),
                       Text(_resendCodeTimer > 0 ? 'Resend in $_timerText' : ''),
                     ],
@@ -214,7 +214,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _newPasswordController,
-                      decoration: InputDecoration(labelText: 'New Password'),
+                      decoration: const InputDecoration(labelText: 'New Password'),
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -230,7 +230,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     TextFormField(
                       controller: _confirmPasswordController,
                       decoration:
-                          InputDecoration(labelText: 'Confirm New Password'),
+                          const InputDecoration(labelText: 'Confirm New Password'),
                       obscureText: true,
                       validator: (value) {
                         if (value != _newPasswordController.text) {
@@ -243,8 +243,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ElevatedButton(
                       onPressed: _isLoading ? null : _resetPassword,
                       child: _isLoading
-                          ? CircularProgressIndicator(color: Colors.white)
-                          : Text('Reset Password'),
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text('Reset Password'),
                     ),
                   ],
                 ],

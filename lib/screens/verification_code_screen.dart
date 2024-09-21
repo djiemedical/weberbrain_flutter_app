@@ -8,10 +8,10 @@ class VerificationScreen extends StatefulWidget {
   final bool isPasswordReset;
 
   const VerificationScreen({
-    Key? key,
+    super.key,
     required this.email,
     this.isPasswordReset = false,
-  }) : super(key: key);
+  });
 
   @override
   _VerificationScreenState createState() => _VerificationScreenState();
@@ -48,7 +48,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
       _remainingTime = 180; // 3 minutes in seconds
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > 0) {
           _remainingTime--;
@@ -159,7 +159,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                 children: [
                   Text(
                     'Enter the verification code sent to ${widget.email}',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
@@ -170,7 +170,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitForm,
                     child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
+                        ? const CircularProgressIndicator(color: Colors.white)
                         : Text(
                             widget.isPasswordReset ? 'Verify Code' : 'Verify'),
                   ),
@@ -181,7 +181,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                       TextButton(
                         onPressed:
                             _canResend && !_isLoading ? _resendCode : null,
-                        child: Text('Resend Code'),
+                        child: const Text('Resend Code'),
                       ),
                       Text(_canResend ? '' : 'Resend in $_timerText'),
                     ],
@@ -199,8 +199,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
 class VerificationCodeInput extends StatelessWidget {
   final List<TextEditingController> controllers;
 
-  const VerificationCodeInput({Key? key, required this.controllers})
-      : super(key: key);
+  const VerificationCodeInput({super.key, required this.controllers});
 
   @override
   Widget build(BuildContext context) {

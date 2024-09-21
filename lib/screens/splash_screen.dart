@@ -3,7 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../utils/secure_storage.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen>
   String _buildNumber = '';
   late AnimationController _controller;
   late Animation<double> _animation;
-  final Color accentColor = Color(0xFF2691A5);
+  final Color accentColor = const Color(0xFF2691A5);
 
   @override
   void initState() {
@@ -71,7 +71,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1F2225),
+      backgroundColor: const Color(0xFF1F2225),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -108,7 +108,7 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 ),
                 Text('Build: $_buildNumber',
-                    style: TextStyle(color: Colors.white70)),
+                    style: const TextStyle(color: Colors.white70)),
                 const Text('© 2024 Weber Medical GmbH',
                     style: TextStyle(color: Colors.white70)),
                 const SizedBox(height: 20),

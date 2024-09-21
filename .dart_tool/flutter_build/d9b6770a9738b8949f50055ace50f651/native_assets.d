@@ -1,0 +1,1 @@
+ D:\\Weber\ Brain\\weberbrain_flutter_app\\.dart_tool\\flutter_build\\d9b6770a9738b8949f50055ace50f651\\native_assets.yaml: 

@@ -9,7 +9,7 @@ import 'my_profile_screen.dart';
 import 'settings_screen.dart';
 
 class MyDeviceScreen extends StatefulWidget {
-  const MyDeviceScreen({Key? key}) : super(key: key);
+  const MyDeviceScreen({super.key});
 
   @override
   _MyDeviceScreenState createState() => _MyDeviceScreenState();
@@ -84,7 +84,7 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
     });
 
     try {
-      await FlutterBluePlus.startScan(timeout: Duration(seconds: 15));
+      await FlutterBluePlus.startScan(timeout: const Duration(seconds: 15));
 
       _scanResultsSubscription = FlutterBluePlus.scanResults.listen((results) {
         setState(() {
@@ -97,7 +97,7 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
         print('Error during scan: $e');
       });
 
-      await Future.delayed(Duration(seconds: 15));
+      await Future.delayed(const Duration(seconds: 15));
       await FlutterBluePlus.stopScan();
     } catch (e) {
       print('Error starting scan: $e');
@@ -171,7 +171,7 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
 
   Future<void> _handleRefresh() async {
     await _startScan();
-    return Future.delayed(Duration(seconds: 1));
+    return Future.delayed(const Duration(seconds: 1));
   }
 
   void _onItemTapped(int index) {
@@ -267,7 +267,7 @@ class _MyDeviceScreenState extends State<MyDeviceScreen> {
                   const SizedBox(height: 8),
                   _buildDeviceList(),
                   if (_isScanning)
-                    Center(
+                    const Center(
                       child: Column(
                         children: [
                           CircularProgressIndicator(),

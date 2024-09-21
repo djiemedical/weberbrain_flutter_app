@@ -6,8 +6,7 @@ import '../services/auth_service.dart';
 class AccountConfirmationScreen extends StatefulWidget {
   final String email;
 
-  const AccountConfirmationScreen({Key? key, required this.email})
-      : super(key: key);
+  const AccountConfirmationScreen({super.key, required this.email});
 
   @override
   _AccountConfirmationScreenState createState() =>
@@ -45,7 +44,7 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
       _remainingTime = 180;
     });
 
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_remainingTime > 0) {
           _remainingTime--;
@@ -136,7 +135,7 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Verify Email'),
+        title: const Text('Verify Email'),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -149,7 +148,7 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
                 children: [
                   Text(
                     'Enter the verification code sent to ${widget.email}',
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
@@ -160,8 +159,8 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _submitForm,
                     child: _isLoading
-                        ? CircularProgressIndicator(color: Colors.white)
-                        : Text('Verify'),
+                        ? const CircularProgressIndicator(color: Colors.white)
+                        : const Text('Verify'),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -170,7 +169,7 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
                       TextButton(
                         onPressed:
                             _canResend && !_isLoading ? _resendCode : null,
-                        child: Text('Resend Code'),
+                        child: const Text('Resend Code'),
                       ),
                       Text(_canResend ? '' : 'Resend in $_timerText'),
                     ],
@@ -188,8 +187,7 @@ class _AccountConfirmationScreenState extends State<AccountConfirmationScreen> {
 class VerificationCodeInput extends StatelessWidget {
   final List<TextEditingController> controllers;
 
-  const VerificationCodeInput({Key? key, required this.controllers})
-      : super(key: key);
+  const VerificationCodeInput({super.key, required this.controllers});
 
   @override
   Widget build(BuildContext context) {

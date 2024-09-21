@@ -15,7 +15,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +31,12 @@ class MyApp extends StatelessWidget {
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.blue, width: 2),
+            borderSide: const BorderSide(color: Colors.blue, width: 2),
           ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: 12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
             ),
@@ -75,7 +75,7 @@ class BackButtonHandler extends StatelessWidget {
   static const platform =
       MethodChannel('com.example.weberbrain_flutter_app/back_button');
 
-  const BackButtonHandler({Key? key, required this.child}) : super(key: key);
+  const BackButtonHandler({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
